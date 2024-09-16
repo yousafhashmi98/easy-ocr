@@ -2,6 +2,7 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import easyocr
+import os
 
 from global_functions import write_file
 
@@ -26,13 +27,15 @@ async def root():
 async def ocr_detection_easyocr(image_file:UploadFile = File(...)):
     file_path = write_file(file=image_file)
     if file_path == False:
-        return None
+        return {"detail":None}
     reader = easyocr.Reader(['en'], gpu=True)
     results = reader.readtext(file_path)
     if results:
-        return results
+        os.remove(file_path)
+        return {"detail":results}
     else:
-        return None
+        os.remove(file_path)
+        return {"detail":None}
 
 if __name__ == '__main__':
     uvicorn.run(app=app,host='localhost',port=9000)
