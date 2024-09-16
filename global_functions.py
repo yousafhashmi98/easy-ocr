@@ -1,6 +1,20 @@
 from fastapi import UploadFile
 import os
+import numpy as np
 
+def convert_numpy_to_python(results):
+    python_results = []
+    for result in results:
+        python_result = []
+        for item in result:
+            if isinstance(item, np.ndarray):
+                python_result.append(item.tolist())
+            elif isinstance(item, np.generic):
+                python_result.append(item.item())
+            else:
+                python_result.append(item)
+        python_results.append(python_result)
+    return python_results
 
 def write_file(file:UploadFile):
     try:

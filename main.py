@@ -4,7 +4,7 @@ import uvicorn
 import easyocr
 import os
 
-from global_functions import write_file
+from global_functions import write_file, convert_numpy_to_python
 
     
 app=FastAPI()
@@ -31,8 +31,10 @@ async def ocr_detection_easyocr(image_file:UploadFile = File(...)):
     reader = easyocr.Reader(['en'], gpu=True)
     results = reader.readtext(file_path)
     if results:
+        print(type(results))
+        final_results = convert_numpy_to_python(results=results)
         os.remove(file_path)
-        return {"detail":results}
+        return {"detail":final_results}
     else:
         os.remove(file_path)
         return {"detail":None}

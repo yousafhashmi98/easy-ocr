@@ -2,3 +2,4 @@ fastapi
 easyocr
 uvicorn
 python-multipart
+numpy
