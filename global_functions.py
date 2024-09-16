@@ -10,12 +10,13 @@ def convert_numpy_to_python(results):
         for item in result:
             if isinstance(item, np.ndarray):
                 python_result.append(item.tolist())
-            elif isinstance(item, np.generic):
+            elif isinstance(item, (np.generic, np.int32, np.float32)):
                 python_result.append(item.item())
             else:
                 python_result.append(item)
         python_results.append(python_result)
     return python_results
+
 
 def write_file(file:UploadFile):
     try:
