@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import easyocr
@@ -34,7 +35,7 @@ async def ocr_detection_easyocr(image_file:UploadFile = File(...)):
         print(type(results))
         final_results = convert_numpy_to_python(results=results)
         os.remove(file_path)
-        return {"detail":final_results}
+        return JSONResponse(content= {"detail":final_results})
     else:
         os.remove(file_path)
         return {"detail":None}
