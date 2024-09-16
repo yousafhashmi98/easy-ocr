@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import easyocr
+
+from global_functions import write_file
 
     
 app=FastAPI()
@@ -21,10 +23,12 @@ async def root():
     return {"message": "server is running"}
 
 @app.post("/process-image")
-async def ocr_detection_easyocr(imgpath):
-    reader = easyocr.Reader(['en'], gpu=True)  # Specify the language(s) you need
-    results = reader.readtext(imgpath)
-    
+async def ocr_detection_easyocr(image_file:UploadFile = File(...)):
+    file_path = write_file(file=image_file)
+    if file_path == False:
+        return None
+    reader = easyocr.Reader(['en'], gpu=True)
+    results = reader.readtext(file_path)
     if results:
         return results
     else:
