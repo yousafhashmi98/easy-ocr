@@ -28,7 +28,7 @@ async def root():
 async def ocr_detection_easyocr(image_file:UploadFile = File(...)):
     file_path = write_file(file=image_file)
     if file_path == False:
-        return {"detail":None}
+        return None
     reader = easyocr.Reader(['en'], gpu=True)
     results = reader.readtext(file_path)
     if results:
@@ -37,10 +37,10 @@ async def ocr_detection_easyocr(image_file:UploadFile = File(...)):
         final_results = convert_numpy_to_python(results=results)
         print(f"Final Results: {final_results}", end="\n")
         os.remove(file_path)
-        return JSONResponse(content= {"detail":final_results})
+        return final_results
     else:
         os.remove(file_path)
-        return {"detail":None}
+        return None
 
 if __name__ == '__main__':
     uvicorn.run(app=app,host='localhost',port=9000)
