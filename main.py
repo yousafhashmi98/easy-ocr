@@ -33,9 +33,9 @@ async def ocr_detection_easyocr(image_file:UploadFile = File(...)):
     results = reader.readtext(file_path)
     if results:
         print(type(results),end="\n")
-        print(f"Raw Results: {results}")
+        print(f"Raw Results: {results}", end="\n")
         final_results = convert_numpy_to_python(results=results)
-        print(f"Final Results: {final_results}")
+        print(f"Final Results: {final_results}", end="\n")
         os.remove(file_path)
         return JSONResponse(content= {"detail":final_results})
     else:
